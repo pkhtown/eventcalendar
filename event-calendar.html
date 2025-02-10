@@ -34,7 +34,7 @@
       border: 2px solid #ccc;
       border-radius: 8px;
     }
-    /* Style for the Add Gig button */
+    /* Style for the Add Event button */
     #add-point-btn {
       display: block;
       margin: 20px auto 0;
@@ -99,9 +99,9 @@
 </head>
 <body>
   <div class="container">
-    <h1>Gig Calendar</h1>
+    <h1>Event Calendar</h1>
     <div id="map"></div>
-    <button id="add-point-btn">Add Gig</button>
+    <button id="add-point-btn">Add Event</button>
   </div>
 
   <!-- Leaflet JS -->
@@ -123,7 +123,7 @@
     var addingPoint = false;
     var tempMarker = null;
 
-    // When the Add Gig button is clicked, activate "adding" mode.
+    // When the Add Event button is clicked, activate "adding" mode.
     // A temporary red dot will follow the cursor.
     document.getElementById('add-point-btn').addEventListener('click', function() {
       addingPoint = true;
@@ -135,7 +135,7 @@
           fillOpacity: 0.9
         }).addTo(map);
       }
-      console.log("Move your cursor on the map and click to set your gig location.");
+      console.log("Move your cursor on the map and click to set your Event location.");
     });
 
     // Update the temporary marker's position as the user moves the mouse.
@@ -268,33 +268,33 @@
 
     // Save event data to localStorage.
     function saveEventToLocalStorage(eventObj) {
-      var gigs = JSON.parse(localStorage.getItem('gigs')) || [];
-      gigs.push(eventObj);
-      localStorage.setItem('gigs', JSON.stringify(gigs));
+      var Events = JSON.parse(localStorage.getItem('Events')) || [];
+      Events.push(eventObj);
+      localStorage.setItem('Events', JSON.stringify(Events));
     }
 
     // Update localStorage for an edited event.
     function updateEventInLocalStorage(updatedEvent) {
-      var gigs = JSON.parse(localStorage.getItem('gigs')) || [];
-      gigs = gigs.map(function(ev) {
+      var Events = JSON.parse(localStorage.getItem('Events')) || [];
+      Events = Events.map(function(ev) {
         return (ev.id === updatedEvent.id) ? updatedEvent : ev;
       });
-      localStorage.setItem('gigs', JSON.stringify(gigs));
+      localStorage.setItem('Events', JSON.stringify(Events));
     }
 
     // Delete an event from localStorage by id.
     function deleteEventFromLocalStorage(eventId) {
-      var gigs = JSON.parse(localStorage.getItem('gigs')) || [];
-      gigs = gigs.filter(function(ev) {
+      var Events = JSON.parse(localStorage.getItem('Events')) || [];
+      Events = Events.filter(function(ev) {
         return ev.id !== eventId;
       });
-      localStorage.setItem('gigs', JSON.stringify(gigs));
+      localStorage.setItem('Events', JSON.stringify(Events));
     }
 
     // Load saved events from localStorage and display them.
     function loadSavedEvents() {
-      var gigs = JSON.parse(localStorage.getItem('gigs')) || [];
-      gigs.forEach(function(eventObj) {
+      var Events = JSON.parse(localStorage.getItem('Events')) || [];
+      Events.forEach(function(eventObj) {
         var latlng = [eventObj.lat, eventObj.lng];
         var markerColor = getColorFromDate(eventObj.eventDate);
         var marker = L.circleMarker(latlng, {
@@ -333,7 +333,7 @@
       // Delete button clicked.
       if (e.target && e.target.classList.contains('delete-btn')) {
         var eventId = Number(e.target.getAttribute('data-event-id'));
-        if (confirm("Are you sure you want to delete this gig?")) {
+        if (confirm("Are you sure you want to delete this Event?")) {
           // Remove marker from map.
           if (markers[eventId]) {
             map.removeLayer(markers[eventId]);
@@ -348,8 +348,8 @@
       if (e.target && e.target.classList.contains('edit-btn')) {
         var eventId = Number(e.target.getAttribute('data-event-id'));
         // Retrieve the event object from localStorage.
-        var gigs = JSON.parse(localStorage.getItem('gigs')) || [];
-        var eventObj = gigs.find(function(ev) { return ev.id === eventId; });
+        var Events = JSON.parse(localStorage.getItem('Events')) || [];
+        var eventObj = Events.find(function(ev) { return ev.id === eventId; });
         if (eventObj && markers[eventId]) {
           // Open an edit popup form at the marker's location.
           showEditPopup(eventObj, markers[eventId]);
